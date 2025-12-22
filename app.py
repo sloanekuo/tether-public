@@ -1,4 +1,4 @@
-# --- APP.PY V4 (Hybrid System // DNA Logic V3) ---
+# --- APP.PY V4.6 (Gemini 2.0 Upgrade) ---
 
 import streamlit as st
 import google.generativeai as genai
@@ -24,21 +24,32 @@ st.set_page_config(
     }
 )
 
-# Force "Dark Editorial" Theme via Injection
 st.markdown("""
     <style>
-    /* Force deep charcoal background and white text */
     .stApp {
         background-color: #0F1116;
         color: #FFFFFF;
     }
-    /* Editorial Red for key highlights if needed */
     .highlight {
         color: #E63946;
         font-weight: bold;
     }
-    /* Hide the default Streamlit header decoration */
     header {visibility: hidden;}
+    
+    /* REMOVE UI STROKES */
+    .stTextArea div[data-baseweb="base-input"] {
+        background-color: #1C1E26; 
+        border: none !important;
+        border-radius: 4px;
+    }
+    .stTextArea div[data-baseweb="base-input"]:focus-within {
+        box-shadow: none !important;
+        border: none !important;
+        outline: none !important;
+    }
+    .block-container {
+        padding-top: 2rem; 
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -53,32 +64,35 @@ def load_nlp():
 
 nlp = load_nlp()
 
-# The Lexicon
+# THE LEXICON (LEMMAS / BASE FORMS)
 BUILDER_VERBS = [
-    "architected", "built", "created", "designed", "developed", "devised", 
-    "engineered", "established", "founded", "formulated", "implemented", 
-    "initiated", "launched", "originated", "piloted", "pioneered", "revamped", 
-    "structured", "spearheaded", "transformed", "shipped", "coded", "deployed"
+    "architect", "build", "create", "design", "develop", "devise", 
+    "engineer", "establish", "found", "formulate", "implement", 
+    "initiate", "launch", "originate", "pilot", "pioneer", "revamp", 
+    "structure", "spearhead", "transform", "ship", "code", "deploy",
+    "produce", "compose", "draft"
 ]
 
 OPERATOR_VERBS = [
-    "accelerated", "administered", "analyzed", "augmented", "centralized", 
-    "conserved", "consolidated", "decreased", "ensured", "executed", 
-    "expanded", "expedited", "generated", "improved", "increased", 
-    "maintained", "managed", "maximized", "optimized", "orchestrated", 
-    "processed", "reduced", "refined", "resolved", "scaled", "streamlined"
+    "accelerate", "administer", "analyze", "augment", "centralize", 
+    "conserve", "consolidate", "decrease", "ensure", "execute", 
+    "expand", "expedite", "generate", "improve", "increase", 
+    "maintain", "manage", "maximize", "optimize", "orchestrate", 
+    "process", "reduce", "refine", "resolve", "scale", "streamline",
+    "conduct", "coordinate"
 ]
 
 BRIDGE_VERBS = [
-    "aligned", "collaborated", "communicated", "convinced", "cultivated", 
-    "directed", "enabled", "facilitated", "guided", "influenced", 
-    "mentored", "negotiated", "partnered", "persuaded", "presented", 
-    "promoted", "reconciled", "represented", "secured", "united"
+    "align", "collaborate", "communicate", "convince", "cultivate", 
+    "direct", "enable", "facilitate", "guide", "influence", 
+    "mentor", "negotiate", "partner", "persuade", "present", 
+    "promote", "reconcile", "represent", "secure", "unite",
+    "counsel", "articulate"
 ]
 
 WEAK_VERBS = [
-    "assisted", "helped", "participated", "supported", "worked", "responsible for", 
-    "handled", "duties included", "contributed", "attended"
+    "assist", "help", "participate", "support", "work", 
+    "handle", "contribute", "attend"
 ]
 
 def analyze_archetype(text):
@@ -96,25 +110,19 @@ def analyze_archetype(text):
     total = b_score + o_score + br_score
     if total == 0: total = 1 
     
-    # --- DNA LOGIC V3 (Hybrid Detection) ---
     scores = {"Builder": b_score, "Operator": o_score, "Bridge": br_score}
     
-    # Sort scores to find Top 1 and Top 2
     sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
     (primary_name, primary_score) = sorted_scores[0]
     (secondary_name, secondary_score) = sorted_scores[1]
     
-    # Calculate the Gap
     delta = primary_score - secondary_score
-    
-    # Logic: If Gap < 20 points (approx 2 verbs), it's a Hybrid
-    hybrid_label = primary_name # Default to just the primary
+    hybrid_label = primary_name 
     is_hybrid = False
     
     if delta < 20 and secondary_score > 0:
         is_hybrid = True
-        # Define the 3 Hybrid States
-        pair = sorted([primary_name, secondary_name]) # Sort alphabetically to match keys
+        pair = sorted([primary_name, secondary_name]) 
         if pair == ['Builder', 'Operator']:
             hybrid_label = "The Industrialist"
         elif pair == ['Bridge', 'Builder']:
@@ -129,16 +137,10 @@ def analyze_archetype(text):
         "weaknesses": weaknesses, "length": len(text)
     }
 
-# --- 3. THE BRAIN (GEMINI NARRATIVE) ---
+# --- 3. THE BRAIN (GEMINI 2.0 UPGRADE) ---
 def generate_stroma_report(text, analysis, api_key):
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        
-        # Calculate Ratios
-        b, o, br = analysis['b'], analysis['o'], analysis['br']
-        total = b + o + br
-        if total == 0: total = 1
         
         # Prompt Logic
         identity_context = f"Primary: {analysis['primary']}"
@@ -151,9 +153,9 @@ def generate_stroma_report(text, analysis, api_key):
         
         **DNA SIGNAL:**
         - Identity: {identity_context}
-        - Builder Score: {b}
-        - Operator Score: {o}
-        - Bridge Score: {br}
+        - Builder Score: {analysis['b']}
+        - Operator Score: {analysis['o']}
+        - Bridge Score: {analysis['br']}
         
         **TASK:**
         Generate a "Stroma Professional Audit" in 3 strict sections. 
@@ -173,15 +175,22 @@ def generate_stroma_report(text, analysis, api_key):
         **SECTION 3: THE PROOF (3 Rewritten Bullets)**
         Find 3 bullet points from the text that use weak language.
         Rewrite them to match their Archetype Voice ({analysis['label']}).
-        - If Industrialist: Combine "Building" and "Scaling" verbs.
-        - If Evangelist: Combine "Building" and "Persuading" verbs.
         
         **INPUT TEXT:**
         {text[:5000]}
         """
         
-        response = model.generate_content(prompt)
-        return response.text
+        # TRY GEMINI 2.0 (From your active list)
+        try:
+            model = genai.GenerativeModel('gemini-2.0-flash')
+            response = model.generate_content(prompt)
+            return response.text
+        except:
+            # FALLBACK TO LATEST ALIAS (Safety Net)
+            model = genai.GenerativeModel('gemini-flash-latest')
+            response = model.generate_content(prompt)
+            return response.text
+
     except Exception as e:
         return f"System Signal Lost: {str(e)}"
 
@@ -227,7 +236,6 @@ def main():
     if 'session_id' not in st.session_state:
         st.session_state.session_id = str(uuid.uuid4())
 
-    # HEADER
     st.title("Tether")
     st.markdown("""
     Most resumes are lists of tasks. This obscures your value.
@@ -240,7 +248,6 @@ def main():
     * **Usage:** Your data is never sold. It is used exclusively to architect your narrative and train internal models.
     """)
     
-    # INPUT
     st.write("---")
     text_input = st.text_area("Paste your full resume:", height=250)
     
@@ -249,7 +256,7 @@ def main():
             st.warning("Input signal too weak. Please provide more detail.")
         else:
             with st.spinner("Stroma System is extracting semantic patterns..."):
-                # 1. ANALYZE (DNA Logic V3)
+                # 1. ANALYZE
                 analysis = analyze_archetype(text_input)
                 
                 # 2. GENERATE REPORT
@@ -266,7 +273,6 @@ def main():
                 # 4. VISUALIZE
                 st.write("---")
                 
-                # Clean Metric Layout
                 c1, c2 = st.columns(2)
                 
                 # Metric 1: Identity
@@ -275,7 +281,9 @@ def main():
                     label_display = f"{analysis['label']} ({analysis['primary'][0]}+{analysis['secondary'][0]})"
                 
                 c1.metric("Dominant Signal", label_display)
-                c2.metric("Weak Verbs Detected", f"{len(analysis['weaknesses'])}")
+                
+                # Metric 2: Secondary Signal (Replaces Weak Verbs)
+                c2.metric("Secondary Signal", f"{analysis['secondary']}")
                 
                 # Chart
                 chart_data = pd.DataFrame({
@@ -283,8 +291,9 @@ def main():
                     'Score': [analysis['b'], analysis['o'], analysis['br']]
                 })
                 
+                # Chart Config for White Text
                 chart = alt.Chart(chart_data).mark_bar().encode(
-                    x=alt.X('Archetype', axis=None),
+                    x=alt.X('Archetype', axis=alt.Axis(labelAngle=0)),
                     y=alt.Y('Score', axis=None),
                     color=alt.Color('Archetype', scale=alt.Scale(
                         domain=['Builder', 'Operator', 'Bridge'],
@@ -295,11 +304,19 @@ def main():
                     background='transparent'
                 ).configure_view(
                     strokeOpacity=0
+                ).configure_axis(
+                    labelColor='#FFFFFF',
+                    titleColor='#FFFFFF',
+                    grid=False
+                ).configure_legend(
+                    labelColor='#FFFFFF',
+                    titleColor='#FFFFFF'
                 ).properties(
                     height=200
                 )
                 
                 st.altair_chart(chart, use_container_width=True, theme="streamlit")
+                
                 # 5. REPORT
                 st.subheader("The Stroma Audit")
                 st.markdown(report)

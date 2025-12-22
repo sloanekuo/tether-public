@@ -1,4 +1,4 @@
-# Tether // Stroma Labs (v4.0)
+# Tether.
 
 **Semantic Resume Analysis Engine**
 
@@ -58,3 +58,9 @@ Tether V4 upgrades from a binary classifier to a **Spectrum Analyzer**. It detec
 4. **Run the Engine**
    ```bash
    streamlit run app.py
+
+---
+
+### **License**
+© 2025 Stroma Labs.
+All rights reserved.
