@@ -1,66 +1,51 @@
+```markdown
 # Tether.
 
-**Semantic Resume Analysis Engine**
+**R&D by Stroma Labs.**
 
-Most resumes are lists of tasks. This obscures value. Tether decodes professional DNA to reveal the user's **Impact Archetype**:
-* **Builder:** 0-to-1 Creation & Architecture.
-* **Operator:** Scale, Optimization & Efficiency.
-* **Bridge:** Alignment, Strategy & Translation.
+### "You didn't fail. You just overheated."
 
----
+Tether is not a career coach. It is an **Evolutionary Profiler**.
+Most high-performers do not burn out because they are weak. They burn out because of **System Incompatibility**.
 
-### **New in v4.0: The Hybrid System (Logic V3)**
-Tether V4 upgrades from a binary classifier to a **Spectrum Analyzer**. It detects nuanced signal gaps to identify complex, hybrid profiles:
-* **The Industrialist (Builder + Operator):** The person who scales what they build.
-* **The Evangelist (Builder + Bridge):** The person who creates the vision and sells it.
-* **The Integrator (Operator + Bridge):** The person who aligns the people to the machine.
+Tether uses **Gemini 2.0 Flash** to analyze your resume and diagnose the "Physics of the Crash." It determines your biological archetype and explains why your specific strengths triggered a toxic system's immune response.
 
 ---
 
-### **Features**
-* **Context-Aware Narrative:** Generates a "Hero Statement" and "Environment Audit" based on the specific archetype mix.
-* **The Vault (Google Sheets):** Anonymized semantic data is logged to a secure database for future model training.
-* **Privacy First:** Automated PII Redaction scrubs emails and phone numbers before analysis.
-* **Dark Editorial UI:** A custom-injected visual theme for high-focus reading.
+### Core Architecture (V5.0)
+
+Tether V5.0 moves beyond "Keywords" and operates on "Principles of Friction."
+
+**1. The Species (Identity)**
+Are you a **Builder** (Kinetic Energy), a **Bridge** (Conductive Energy), or an **Operator** (Structural Energy)? We don't use corporate titles. We define your metabolic function.
+
+**2. The Friction (Physics)**
+Burnout is heat. Heat is generated when a high-velocity object hits a low-velocity environment. Tether calculates where the friction occurred (e.g., *Speed vs. Stasis* or *Connection vs. Silos*).
+
+**3. The Gaslight Decoder**
+Toxic systems often rename "Strengths" as "Weaknesses" to maintain control. Tether reverses this process:
+* *They called you "Aggressive"* $\rightarrow$ *Tether identifies you as "High-Velocity."*
+* *They called you "Disruptive"* $\rightarrow$ *Tether identifies you as "Truth-Seeking."*
 
 ---
 
-### **Tech Stack**
-* **Core:** Python 3.11, Streamlit
-* **AI Model:** Google Gemini 1.5 Flash
-* **NLP:** Spacy (`en_core_web_sm`)
-* **Visualization:** Altair
-* **Database:** Google Sheets API (via `st-gsheets-connection`)
+### Privacy Protocol
+
+**Tether is a No-Log System.**
+* No personal data is stored in Stroma Labs databases.
+* No Google Sheets logging.
+* All analysis is performed in RAM and is ephemeral (erased upon session close).
 
 ---
 
-### **Local Setup**
+### Tech Stack
 
-1. **Clone the Repo**
-   ```bash
-   git clone [https://github.com/YOUR_USERNAME/tether.git](https://github.com/YOUR_USERNAME/tether.git)
-   cd tether
-   
-2. **Install Dependencies**   
-   ```bash
-   pip install -r requirements.txt
-   
-3. **Configure Secrets Create a file at .streamlit/secrets.toml with your credentials:**   
-   ```Ini, TOML
-   GOOGLE_API_KEY = "YOUR_GEMINI_KEY"
-   
-   [connections.gsheets]
-   spreadsheet = "YOUR_GOOGLE_SHEET_URL"
-   type = "service_account"
-   project_id = "..."
-   # ... (Add full JSON credentials from Google Cloud)
-   
-4. **Run the Engine**
-   ```bash
-   streamlit run app.py
+* **Engine:** Python 3.12
+* **Interface:** Streamlit
+* **Intelligence:** Google Gemini 2.0 Flash (via API)
+* **Parsing:** PyMuPDF (PDF) & Python-Docx (Word)
 
 ---
 
-### **License**
-© 2025 Stroma Labs.
-All rights reserved.
+*© 2025 Stroma Labs. All Rights Reserved.*
+```
